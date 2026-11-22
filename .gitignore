@@ -1,0 +1,16 @@
+# Local planner data is never part of the repository or release.
+**/completed.json
+**/appearance.json
+**/notes.json
+**/preview.png
+**/*.before-*.ps1
+.env
+.env.*
+!.env.example
+*.log
+dist/
+.verification/
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
