@@ -10,7 +10,9 @@ $appPath = Join-Path $repoRoot 'src\Plan.ps1'
 $source = [IO.File]::ReadAllText($appPath)
 if ($source -match 'TomorrowPlan-2026|Local\\Vito|Ігор|Німеччин|C:\\Users\\Vito') { throw 'Personal prototype data was found in the public source.' }
 foreach ($name in @('completed.json','appearance.json','notes.json')) {
-    if (Test-Path -LiteralPath (Join-Path $repoRoot "src\$name")) { throw "Local state must not ship in src: $name" }
+    $tracked = @(git -C $repoRoot ls-files -- "src/$name")
+    if ($LASTEXITCODE -ne 0) { throw 'Could not verify tracked planner state' }
+    if ($tracked.Count -gt 0) { throw "Local state must not be tracked: $name" }
 }
 $tempBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
 $testDirectory = Join-Path $tempBase ('lofi-planner-check-' + [guid]::NewGuid().ToString('N'))
